@@ -14,17 +14,15 @@
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
     in
     {
-      overlay = final: prev: {
+      overlays = [ (final: prev: {
         "${cargoToml.package.name}" = final.callPackage ./. { inherit naersk; };
-      };
+      }) ];
 
       packages = forAllSystems (system:
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [
-              self.overlay
-            ];
+            overlays = self.overlays;
           };
         in
         {
@@ -34,16 +32,14 @@
 
       defaultPackage = forAllSystems (system: (import nixpkgs {
         inherit system;
-        overlays = [ self.overlay ];
+        overlays = self.overlays;
       })."${cargoToml.package.name}");
 
       checks = forAllSystems (system:
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [
-              self.overlay
-            ];
+            overlays = self.overlays;
           };
         in
         {
@@ -61,7 +57,7 @@
         let
           pkgs = import nixpkgs {
             inherit system;
-            overlays = [ self.overlay ];
+            overlays = self.overlays;
           };
         in
         pkgs.mkShell {

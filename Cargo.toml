@@ -2,6 +2,7 @@
 
 [package]
 name = "git-auto-fetch"
+description = "does a git fetch"
 version = "0.1.0"
 edition = "2018"
 
