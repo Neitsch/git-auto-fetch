@@ -114,7 +114,10 @@ mod tests {
         let remote_dir = temp.child("remote");
         let remote_repository = git2::Repository::init(remote_dir.to_path_buf()).unwrap();
         let local_repository = git2::Repository::init(local_dir.to_path_buf()).unwrap();
-        local_repository.remote(remote_name, &format!("file://{}/.git", remote_dir.to_path_buf().to_str().unwrap()));
+        local_repository.remote(
+            remote_name,
+            &format!("file://{}/.git", remote_dir.to_path_buf().to_str().unwrap()),
+        );
         let config = serde_json::to_string(&Config {
             repositories: vec![GitRepository {
                 local_path: local_dir.to_path_buf(),
